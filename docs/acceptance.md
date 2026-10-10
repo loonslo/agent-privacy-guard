@@ -1,5 +1,39 @@
 # 验收记录
 
+## 2026-10-10 一行下载调用与推送
+
+用户明确要求推送并补齐一行下载使用体验。v0.4 独立包源码首先以提交
+`3c9e779` 推送到 loonslo/agent-privacy-guard 的 codex/initial-implementation。
+随后新增 scripts/review.ps1：固定 v0.4.0 下载、内置 SHA256 校验、受检项目外
+临时目录解压与直接调用；不安装组件、不更改 PATH/客户端/项目配置。
+
+实际环境为 Windows、本项目已有独立虚拟环境及 Windows PowerShell 5.1。
+使用合成材料与隔离临时 Git 仓库；下载替身测试覆盖干净内容、风险、网络失败、
+校验失败、未知参数、TEMP 位于目标内拒绝，以及输出脱敏/文件/Git 快照不变。
+首轮发现环境缺少 OS 变量及 PowerShell 模块加载差异导致两个主路径失败；
+改用系统平台 API、.NET SHA256/ZIP API 后，全新 privacy-launcher-dotnet-GUID
+basetemp 的启动器 **7 passed in 8.09s**。
+
+包括启动器与 EXE 的本次全量：`.venv/Scripts/python.exe -B -m pytest -q
+--basetemp <全新 privacy-oneline-full-GUID>` → **107 passed in 68.76s**，无跳过。
+新增 CI 将启动器测试指向已发布固定 ZIP，避免误把新构建哈希当作版本资产哈希；
+CI 尚未实际执行。Ruff check、format --check（38 文件）通过。
+
+本次一行入口配套 ZIP 的 SHA256 为
+`424798c8f16ccef1ae343f0a6d7ea7ddda8cb7f612b91f23a2f846274c21e524`，已固定在脚本中。
+此包替代下面历史本机交付哈希；旧产物在项目 dist 内保留，不覆盖历史文件。
+公开发布与实际网络调用结果在完成后补记，不以下载替身测试代替公开下载验收。
+
+## 2026-10-10 README 用户说明重构
+
+本次按用户要求将 README 从能力清单改为用户使用说明：补充适用场景、检查流程、独立包与源码前置条件、给 AI 的指令、Git 范围选择、脱敏 JSON 节选与字段解释、失败处理、能力局限和项目导航。对照 CLI、advisory、model、rules、Skill 及已有验收记录核对；报告示例为明确标注的合成说明，不是实际目标扫描结果。
+
+保留开始任务前已有的一行下载入口设计与脚本，不执行下载或发布；初查时发布 SHA256 为占位符；任务期间并行交付工作已填入校验值，公开调用仍以发布任务的实际验收记录为准。本次未验收公开下载。README 与 docs/standalone.md 均说明此状态，避免把准备中的入口当作已可用入口。
+
+验收环境：Windows / PowerShell、本项目已有 Python 3.14 独立环境。此次只改文档，未改产品代码、未安装依赖、未读取真实凭据或扫描实际仓库；历史 100 项全量与 7 项独立包结果保留为历史证据，本次未重复 pytest、Ruff 或独立包构建。
+
+实际交付检查：通过本项目 `.venv/Scripts/python.exe -B -` 执行一次性文档校验，README 12 个相对链接与 JSON 示例均通过；PowerShell Parser 对 6 个 PowerShell 代码块仅作语法解析，全部通过，未执行示例命令。PROJECT_STATUS 无重复键、必填字段、未加引号日期 2026-10-10、合法状态、非空文字和项目内现存 evidence 路径均通过。文档 diff 空白检查在移除末尾多余空行后通过。命令语法通过不代表远程下载或业务运行已验收。
+
 ## 2026-10-10 v0.4 Windows 单一可执行交付
 
 用户授权解决首次调用门槛。新增维护者构建脚本和 Windows x64 独立规则包，内置 Python 运行时、审查引擎、gitleaks，附 Python/gitleaks/PyInstaller 许可证与 ZIP SHA256 清单。基础 files 审核无需外装组件；Git 模式复用已有 Git。README、Skill 与 docs/standalone.md 给出直接调用方式与平台边界。产品仍只读建议模式，不登记客户端、不安装 hook 或执行修复。

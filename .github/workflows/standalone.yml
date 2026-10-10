@@ -24,6 +24,13 @@ jobs:
       - name: Build standalone bundle
         shell: pwsh
         run: ./.venv/Scripts/python.exe -B scripts/build_standalone.py
+      - name: Prepare pinned published asset for launcher acceptance
+        shell: pwsh
+        run: |
+          # A new build has a new hash; launchers test the actual pinned release ZIP.
+          $releaseArchive = Join-Path $env:RUNNER_TEMP 'privacy-guard-published.zip'
+          Invoke-WebRequest -Uri 'https://github.com/loonslo/agent-privacy-guard/releases/download/v0.4.0/privacy-guard-0.4.0-windows-x64.zip' -OutFile $releaseArchive
+          "PRIVACY_GUARD_TEST_LAUNCHER_ARCHIVE=$releaseArchive" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
       - name: Verify source and executable
         shell: pwsh
         run: |

@@ -2,6 +2,12 @@
 
 ## v0.4 单一交付入口
 
+scripts/review.ps1 是单行命令的分发/调用层：固定版本 HTTPS 下载、内置哈希校验、
+系统临时目录解压、传递明确的审核范围给 EXE。它不安装组件或修改配置；
+TEMP 位于受检根目录内时，在下载前拒绝。使用 .NET 哈希与 ZIP API，避免依赖
+额外 PowerShell 模块。审核子进程的 TEMP/TMP 暂时限定到已验证的外部临时目录，
+退出后恢复当前进程原值；PowerShell LASTEXITCODE 保留原生工具结果。
+
 Windows x64 独立 ZIP → AI 在受检项目外解压 → 直接调用 privacy-guard.exe → 现有 CLI/规则引擎输出脱敏建议。使用 PyInstaller 6.22.0 onefile 打包 Python 3.14 运行时与 `.tools/gitleaks.exe`；运行时按模块 `__file__` 定位内置扫描器，不依赖用户 PATH 或旧 PRIVACY_GUARD_GITLEAKS 配置。依据为 [PyInstaller 运行时说明](https://pyinstaller.org/en/stable/runtime-information.html)。构建器是维护者工具，不是用户安装步骤。
 
 基础 files 模式不依赖 Git。Git 模式复用已有 Git，缺失时返回不完整；不静默安装。MCP 与语义研究保留源码路线，独立规则包不包含它们。冻结环境收到语义请求时保留规则命中并返回静态不完整，避免把冻结后的 sys.executable 当成 Python 重启导致递归。

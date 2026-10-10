@@ -3,8 +3,8 @@ project_id: agent-privacy-guard
 updated: 2026-10-10
 status: active
 overview: "只读隐私审查：Windows x64 独立规则包可直接由 AI 调用，无需另装 Python/扫描器/MCP；保留源码 Skill/MCP 与可选本机语义研究入口，输出建议由用户决定。"
-progress: "2026-10-10 v0.4 独立包本机构建与全量 100 项通过，最终 ZIP 另跑 7 项通过；隔离单 EXE/PATH 空环境可审核合成文件且目标不变。v0.3 源码历史已发布；v0.4 远程发布、公开下载、CI、真实无 Python 新机器与其他平台尚未验收。"
-next: "用户确认后发布 v0.4.0 源码和已核验 ZIP 到指定 GitHub 仓库并验收公开下载；随后验证真正无 Python 的 Windows x64 新机器及其他平台，保持只读建议模式。"
+progress: "2026-10-10 README 用户说明重构已保留；v0.4 源码 3c9e779 已推送，一行 PowerShell 下载/校验/审核入口本次全量 107 项通过，CI 固定资产输入增补后启动器 7 项通过。公开发布与调用待核验；CI、真实无 Python 新机器、其他平台及语义模型尚未验收。"
+next: "按已授权发布任务完成 v0.4.0 资产交付并验收公开一行调用；随后验证真正无 Python 的 Windows x64 新机器、CI 及其他平台，保持只读建议模式。"
 evidence:
   - TASKS.md
   - docs/requirements.md

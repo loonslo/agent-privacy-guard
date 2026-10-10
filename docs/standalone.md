@@ -1,4 +1,24 @@
-# 无需安装组件的 Windows 审核入口
+# 一行下载并审核的 Windows 入口
+
+> 交付状态（2026-10-10）：独立包已完成本机构建与隔离验证，公开 Release 下载与一行入口仍待发布验收。以下远程命令是发布完成后的调用形式，当前不能视为已验证可用。已有核验过的本地包可按下方命令调用。
+
+Windows x64 / PowerShell，发布完成后运行：
+
+```powershell
+& ([scriptblock]::Create((irm https://raw.githubusercontent.com/loonslo/agent-privacy-guard/v0.4.0/scripts/review.ps1))) -Repo . -Paths README.md
+```
+
+入口自动获取固定版本 ZIP，用脚本内置 SHA256 校验，在系统临时目录展开并运行。
+`-Repo` 是项目根目录，`-Paths` 是明确指定的相对文件，可传 PowerShell 数组。
+`-Mode staged` 检查暂存区；`-Mode push -Tip '<ref>' -Base '<base 或 ->'` 检查显式
+提交范围；`-Source memory` 或 `chat_history` 为导出提供来源提示。
+下载失败、校验失败或参数不完整时返回静态 JSON review_complete=false。
+PowerShell 中 `$LASTEXITCODE` 保留审核退出码；脚本不退出用户的交互 shell。
+需要外层进程退出码时，在调用之后使用 `exit $LASTEXITCODE`。
+
+这是下载和调用入口，不是系统安装器：不改 PATH、客户端或项目配置，不执行修复。
+每次调用使用新的系统临时目录，材料只交给本机 EXE；工具下载需要网络，审核原文
+不随下载请求上传。下载产物留在系统临时目录，系统可按其临时文件策略清理。
 
 Windows x64 规则包包含 Python 运行时、审查引擎、gitleaks 和许可证。
 下载 ZIP 到受检项目之外并解压，直接调用 privacy-guard.exe；不需要安装
@@ -15,8 +35,7 @@ Python、gitleaks、MCP、Skill 或语义模型，不更改 PATH 或客户端设
 > 不先读取受检原文，不访问真实凭据或 Agent 运行目录；只解释工具返回的脱敏结果。
 > 报告 review_complete、检查范围、未检查项和修改建议；建议交给我决定，不执行修改。
 
-公开 Release 下载尚待发布验收；仓库源码 ZIP 不包含可执行包，不能代替它。
-发布后使用固定版本 Release 的 privacy-guard-0.4.0-windows-x64.zip 与
+手动下载使用固定版本 Release 的 privacy-guard-0.4.0-windows-x64.zip 与
 SHA256SUMS.txt，勿使用未经核验的第三方下载。哈希用于检查传输完整性，
 不等于独立数字签名。
 
