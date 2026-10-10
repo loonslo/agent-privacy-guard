@@ -1,5 +1,17 @@
 # 验收记录
 
+## 2026-10-10 GitHub 首次发布
+
+用户明确授权 commit + push，并指定新建公开仓库 agent-privacy-guard。使用已认证 GitHub CLI 账号 loonslo，新建 [公开仓库](https://github.com/loonslo/agent-privacy-guard)，origin 为该仓库 HTTPS 地址。
+
+环境：原有 Windows / Python 3.14 本机环境；首次源码提交 `e1c07d659641d9ad06f0d74570a7b30eef92193e`，分支 `codex/initial-implementation`，也是远端默认分支。`git push -u origin codex/initial-implementation` 成功，`git ls-remote --heads origin refs/heads/codex/initial-implementation` 与该源码提交一致，首次推送后工作区干净。后续任务/验收/摘要发布记录作为独立文档提交，不重写已发布历史。
+
+发布前核对 40 个源码/说明文件，实际暂存区规则审查 review_complete=true，无 secret:* 命中；其他路径、PII、聊天格式提示经核对为合成测试或文档示例。此结果只覆盖此次提交资料，不是宿主全局防泄漏保护。扫描未启用语义。
+
+MCP 接入样例改为解释器/部署目录占位符，原始需求移除本机工作区绝对路径；确认无真实本机根路径或用户目录进入提交。`.venv/`、`.tools/`、`dist/`、缓存与运行目录保持 Git 忽略；未提交扫描器二进制或 ZIP。提交作者使用已有 noreply 邮箱配置，未读取凭据文件。
+
+`git diff --cached --check` 通过；MCP 样例 JSON 与发布记录结构在文档提交前复查。此前功能全量 93 项和打包针对性 1 项结果保留为历史实际验证，本次仅发布及占位符/文档调整，未重复功能测试。未部署实际客户端、安装 hook、启用语义模型或创建 GitHub Release。
+
 ## 当前：2026-10-10 v0.3 六项能力增补
 
 用户要求增加审查中指出的内容。新增 Memory / History 指定导出来源提示、正文路径检测及静态替换建议、显式多 tip/base 本机历史检查与固定提交 scope、可选本机语义分类、独立 Skill 打包；修复受保护根目录与 CLI 参数回显。产品仍只读，不自动执行建议、安装 hook、登记客户端或推送。
