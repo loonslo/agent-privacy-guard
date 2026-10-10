@@ -22,7 +22,27 @@ CI 尚未实际执行。Ruff check、format --check（38 文件）通过。
 本次一行入口配套 ZIP 的 SHA256 为
 `424798c8f16ccef1ae343f0a6d7ea7ddda8cb7f612b91f23a2f846274c21e524`，已固定在脚本中。
 此包替代下面历史本机交付哈希；旧产物在项目 dist 内保留，不覆盖历史文件。
-公开发布与实际网络调用结果在完成后补记，不以下载替身测试代替公开下载验收。
+CI 固定资产输入参数补充后，以全新 privacy-launcher-ci-input-GUID basetemp 运行启动器，**7 passed in 7.94s**。
+
+### 公开交付实际核验
+
+源码提交 `de22fb255d5d48b446c1249746f64fbf14c0aeaa` 推送成功；创建
+[v0.4.0 Release](https://github.com/loonslo/agent-privacy-guard/releases/tag/v0.4.0)，
+目标固定到上述提交。上传 ZIP（17,530,743 bytes）和 SHA256SUMS.txt，GitHub
+资产 digest 与脚本固定哈希一致，均为 uploaded。没有覆盖既有 Release 或改写历史。
+
+真实网络调用使用 README 的一行命令，从固定 tag 的 raw 地址获取脚本、由脚本从
+公开 Release 获取 ZIP 并核验。在隔离临时 Git 仓库中分别检查普通公开文本与
+合成密钥：PowerShell 7 两次均退出 0、review_complete=true、scanned=1，
+risk_level 分别 none/critical；原文/密钥/路径不出现在输出中，全部目标字节（含
+.git）、status、local config 快照相同。Windows PowerShell 5.1 另从公开地址
+审核隔离普通文件，退出 0、review_complete=true、scanned=1、目标字节不变；
+该子进程清除继承自 PowerShell 7 的 PSModulePath，使用系统默认模块搜索，不改全局环境。
+
+据此更新 README 和独立包在线说明为可用状态，保留用户说明重构。固定 Release
+包保留打包时说明，后续使用说明以仓库最新文档为准，不为纯说明改动替换已固定
+哈希的资产。真实无 Python 新机器、其他平台和 CI 仍未验收；本次不声称真实
+项目已启用保护，也不把无命中解释为安全保证。
 
 ## 2026-10-10 README 用户说明重构
 

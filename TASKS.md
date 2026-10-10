@@ -24,8 +24,8 @@
 - [x] A16 2026-10-10 验证 AI 调用入口与源码依赖边界：7 项针对性测试通过；仅源码且无扫描器的隔离自检返回 review_complete=false。见 docs/acceptance.md。
 - [x] A17 实现 Windows x64 独立规则包（Python 运行时、引擎、gitleaks、许可证），基础文件审核无需额外安装；冻结语义请求静态失败且保留规则，固定使用内置扫描器。2026-10-10 本次全量 100 项通过，最终包针对性 7 项通过；详见 docs/acceptance.md。
 - [x] A18 更新 README/Skill 与构建、平台边界说明；准备 ZIP、SHA256 清单与只读权限的手动/PR 构建工作流；CI 尚未实际运行。
-- [ ] A19 用户已授权推送，源码 3c9e779 已推送；继续发布 v0.4.0 资产并验收公开一行调用。
-- [x] A24 新增 Windows PowerShell 一行下载/校验/调用入口，无额外运行组件安装；7 项下载替身测试通过，公开入口待实际核验。
+- [x] A19 源码 3c9e779/de22fb2 已推送；v0.4.0 Release 上传 ZIP/清单，服务端哈希核对一致；公开一行入口 PowerShell 7 无命中/风险和 Windows PowerShell 5.1 主路径实际通过，目标保持不变。
+- [x] A24 新增 Windows PowerShell 一行下载/校验/调用入口，无额外运行组件安装；全量 107 项通过，CI 输入补充后启动器针对性 7 项通过；公开入口验收见 docs/acceptance.md。
 - [ ] A23 在真正未安装 Python 的 Windows x64 新机器验收；其他平台独立包尚未实现。
 
 - [x] A08 2026-10-10 完成六项能力与 Skill 边界审查；现有回归 57 项通过，新增合成复现发现保护根目录漏检与 CLI 参数回显，详见 docs/skill-review.md。

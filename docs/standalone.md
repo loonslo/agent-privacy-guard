@@ -1,8 +1,8 @@
 # 一行下载并审核的 Windows 入口
 
-> 交付状态（2026-10-10）：独立包已完成本机构建与隔离验证，公开 Release 下载与一行入口仍待发布验收。以下远程命令是发布完成后的调用形式，当前不能视为已验证可用。已有核验过的本地包可按下方命令调用。
+> 交付状态（2026-10-10）：v0.4.0 已发布，公开一行入口已在 PowerShell 7 与 Windows PowerShell 5.1 用合成材料实际调用通过；工具与校验值来自固定版本公开地址。真正无 Python 的新机器、其他平台及 CI 仍未验收。
 
-Windows x64 / PowerShell，发布完成后运行：
+Windows x64 / PowerShell，直接运行：
 
 ```powershell
 & ([scriptblock]::Create((irm https://raw.githubusercontent.com/loonslo/agent-privacy-guard/v0.4.0/scripts/review.ps1))) -Repo . -Paths README.md

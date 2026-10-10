@@ -6,7 +6,7 @@ AI 帮你整理的代码、笔记和对话，可能同时带上硬编码密钥�
 
 当前版本为 **v0.4.0，只读建议模式（advisory）**。审查流程在交付建议后结束；工具不修改文件、不自动修复、不提交或推送，也不安装 hook 或修改客户端设置。
 
-> **交付状态（2026-10-10）**：Windows x64 独立规则包已完成本机构建与隔离验证，包含运行时和密钥扫描器，基础文件审核无需另装 Python、MCP、Skill 或模型。公开 Release 下载与一行入口仍待发布验收。源码 ZIP 不含可执行包。其他平台独立包、真正无 Python 的新机器及真实语义模型效果尚未验收。
+> **交付状态（2026-10-10）**：[v0.4.0 已发布](https://github.com/loonslo/agent-privacy-guard/releases/tag/v0.4.0)，Windows x64 一行下载审核已通过公开地址实测。命令自动获取包含运行时和扫描器的工具，基础文件审核无需另装 Python、MCP、Skill 或模型。源码 ZIP 不含可执行包。其他平台独立包、真正无 Python 的新机器及真实语义模型效果尚未验收。
 
 ## 什么情况下用它
 
@@ -44,6 +44,18 @@ CLI、Skill、MCP 是同一套本机规则的不同调用入口。Skill 告诉 A
 
 ## 开始使用
 
+### 一行下载并审核（推荐）
+
+Windows x64 / PowerShell：把 `-Repo` 换成项目根目录，`-Paths` 换成指定的相对文件：
+
+```powershell
+& ([scriptblock]::Create((irm https://raw.githubusercontent.com/loonslo/agent-privacy-guard/v0.4.0/scripts/review.ps1))) -Repo . -Paths README.md
+```
+
+命令自动下载固定版本 ZIP、按脚本内置 SHA256 核验，再在受检项目外的系统临时目录展开运行。
+不需要手动下载或安装组件。公开入口已在 PowerShell 7 与 Windows PowerShell 5.1 用合成材料实测。
+工具下载需要网络，受检原文不随下载请求上传。`-Repo .` 表示当前项目；脚本返回的是脱敏建议。
+
 ### 已有 Windows x64 独立包
 
 将核验过的包解压到受检项目之外，在 PowerShell 中调用。把 `<工具目录>`、`<项目根目录>` 和文件列表换成你的实际范围：
@@ -64,16 +76,6 @@ CLI、Skill、MCP 是同一套本机规则的不同调用入口。Skill 告诉 A
 > 将建议交给我决定，本次不执行修改。
 
 完整的包使用与构建说明见 [独立包说明](docs/standalone.md)。
-
-### 一行下载入口（准备中）
-
-已有入口设计会下载固定版本 ZIP、按脚本内置 SHA256 核验，再在系统临时目录展开运行。**以下是发布完成后的调用形式，当前尚不能作为已验证的快速开始命令**：
-
-```powershell
-& ([scriptblock]::Create((irm https://raw.githubusercontent.com/loonslo/agent-privacy-guard/v0.4.0/scripts/review.ps1))) -Repo . -Paths README.md
-```
-
-其中 `-Repo .` 表示当前项目，`-Paths` 是明确文件列表。仍需验收脚本和 ZIP 的公开下载与首次调用。工具下载需要网络，受检原文不随下载请求上传。入口面向 Windows x64 / PowerShell。
 
 ### 从源码运行
 
