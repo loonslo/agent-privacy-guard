@@ -1,0 +1,3 @@
+#!/bin/sh
+# Retired compatibility stub. Privacy review is advisory and never blocks Git.
+exit 0

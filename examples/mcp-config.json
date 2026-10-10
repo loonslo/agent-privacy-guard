@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "privacy-review": {
+      "command": "<PYTHON_EXECUTABLE>",
+      "args": ["-B", "<PRIVACY_GUARD_HOME>/scripts/run_mcp.py"]
+    }
+  }
+}
