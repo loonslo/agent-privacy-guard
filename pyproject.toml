@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "agent-privacy-guard"
-version = "0.3.0"
+version = "0.4.0"
 description = "Read-only privacy review and human-facing recommendations"
 requires-python = ">=3.14"
 dependencies = []
@@ -13,6 +13,7 @@ dependencies = []
 dev = ["pytest>=8.4", "ruff>=0.14", "PyYAML>=6.0"]
 mcp = ["mcp>=2.3,<3"]
 semantic = ["transformers[torch]>=4.57,<6"]
+bundle = ["pyinstaller==6.22.0"]
 
 [project.scripts]
 privacy-guard = "privacy_guard.cli:main"

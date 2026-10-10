@@ -4,6 +4,7 @@ from pathlib import Path
 import re
 import shutil
 import subprocess
+import sys
 import tempfile
 
 from .model import Blob, GuardError, Result, finding
@@ -11,10 +12,14 @@ from .rules import inspect
 
 
 def executable() -> str:
+    local = Path(__file__).resolve().parents[1] / ".tools" / "gitleaks.exe"
+    if getattr(sys, "frozen", False):
+        if not local.is_file():
+            raise GuardError("Bundled scanner unavailable; review incomplete")
+        return str(local)
     configured = os.environ.get("PRIVACY_GUARD_GITLEAKS")
     if configured:
         return configured
-    local = Path(__file__).resolve().parents[1] / ".tools" / "gitleaks.exe"
     candidate = str(local) if local.is_file() else shutil.which("gitleaks")
     if not candidate:
         raise GuardError("Gitleaks unavailable; install or set PRIVACY_GUARD_GITLEAKS")

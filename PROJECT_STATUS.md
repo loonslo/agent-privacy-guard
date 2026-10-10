@@ -2,15 +2,16 @@
 project_id: agent-privacy-guard
 updated: 2026-10-10
 status: active
-overview: "外接只读隐私审查 Skill/MCP：指定 Memory/History 导出、密钥、正文路径与拟推送历史检查，以及可选本机语义分类；输出脱敏建议由用户决定。"
-progress: "2026-10-10 v0.3 源码已提交并推送至公开 GitHub 仓库，远端源码提交核对一致；此前全量 93 项及打包针对性 1 项通过，本次发布未重跑功能测试。真实语义模型效果、依赖兼容性及客户端安装未验收。"
-next: "用户准备可信本机隐私分类模型后验证真实语义效果与依赖兼容性；继续固定评测集和客户端接入验收，保持只读且不自动安装或执行。"
+overview: "只读隐私审查：Windows x64 独立规则包可直接由 AI 调用，无需另装 Python/扫描器/MCP；保留源码 Skill/MCP 与可选本机语义研究入口，输出建议由用户决定。"
+progress: "2026-10-10 v0.4 独立包本机构建与全量 100 项通过，最终 ZIP 另跑 7 项通过；隔离单 EXE/PATH 空环境可审核合成文件且目标不变。v0.3 源码历史已发布；v0.4 远程发布、公开下载、CI、真实无 Python 新机器与其他平台尚未验收。"
+next: "用户确认后发布 v0.4.0 源码和已核验 ZIP 到指定 GitHub 仓库并验收公开下载；随后验证真正无 Python 的 Windows x64 新机器及其他平台，保持只读建议模式。"
 evidence:
   - TASKS.md
   - docs/requirements.md
   - docs/acceptance.md
   - docs/architecture.md
   - docs/skill-review.md
+  - docs/standalone.md
 ---
 
 # 项目概览与进度

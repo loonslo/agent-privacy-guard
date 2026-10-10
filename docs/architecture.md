@@ -1,5 +1,15 @@
 # 架构与信任边界（当前 advisory 路线）
 
+## v0.4 单一交付入口
+
+Windows x64 独立 ZIP → AI 在受检项目外解压 → 直接调用 privacy-guard.exe → 现有 CLI/规则引擎输出脱敏建议。使用 PyInstaller 6.22.0 onefile 打包 Python 3.14 运行时与 `.tools/gitleaks.exe`；运行时按模块 `__file__` 定位内置扫描器，不依赖用户 PATH 或旧 PRIVACY_GUARD_GITLEAKS 配置。依据为 [PyInstaller 运行时说明](https://pyinstaller.org/en/stable/runtime-information.html)。构建器是维护者工具，不是用户安装步骤。
+
+基础 files 模式不依赖 Git。Git 模式复用已有 Git，缺失时返回不完整；不静默安装。MCP 与语义研究保留源码路线，独立规则包不包含它们。冻结环境收到语义请求时保留规则命中并返回静态不完整，避免把冻结后的 sys.executable 当成 Python 重启导致递归。
+
+构建只读取引擎、入口和本项目扫描器/许可证；临时构建后写入全新交付目录，拒绝覆盖既有产物。ZIP 随附 Python、gitleaks、PyInstaller 许可证和 SHA256 清单。运行时仅在系统临时目录展开自身与扫描器中间材料；下载/解压目录应在受检项目外。只读约束针对受检项目，不意味着执行时完全不写临时文件。
+
+本次本机隔离测试验证可执行文件调用；真实无 Python 机器、其他 Windows 版本、公开 Release 下载和 CI 执行需要另行验证。没有 OS 沙箱、自动修复、hook 或宿主全局权限隔离。
+
 用户指定范围 → Skill 或 MCP 调用只读规则 API → 返回脱敏风险和修改建议 → 用户决定是否另行让 AI 修改。审查在建议交付后结束。它不注册工具前置事件，不接管命令，不替用户授权或执行修复。
 
 | 模块 | 当前职责 |

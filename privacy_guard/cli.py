@@ -2,6 +2,7 @@ import argparse
 import json
 from pathlib import Path
 
+from . import __version__
 from .advisory import (
     error_report,
     report,
@@ -21,6 +22,7 @@ class SafeParser(argparse.ArgumentParser):
 
 def main(argv: list[str] | None = None) -> int:
     parser = SafeParser(prog="privacy-guard", allow_abbrev=False)
+    parser.add_argument("--version", action="version", version=f"privacy-guard {__version__}")
     parser.add_argument(
         "mode", choices=["files", "staged", "push", "pre-push", "claude-hook", "doctor"]
     )

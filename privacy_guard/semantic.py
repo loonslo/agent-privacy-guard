@@ -12,6 +12,8 @@ from .paths import check_root, protected_path
 
 def semantic_review(blobs: list[Blob], result: Result) -> None:
     try:
+        if getattr(sys, "frozen", False):
+            raise GuardError("Semantic inference not included in standalone rule bundle")
         configured = os.environ.get("PRIVACY_GUARD_SEMANTIC_MODEL")
         if not configured:
             raise GuardError("Local semantic model not configured; semantic review incomplete")

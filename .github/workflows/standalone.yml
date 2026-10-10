@@ -1,0 +1,42 @@
+name: Windows standalone acceptance
+
+on:
+  workflow_dispatch:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+      - name: Prepare isolated build environment
+        shell: pwsh
+        run: |
+          python -m venv .venv
+          ./.venv/Scripts/python.exe -m pip install -e '.[dev,mcp,bundle]'
+          ./scripts/install-gitleaks.ps1
+      - name: Build standalone bundle
+        shell: pwsh
+        run: ./.venv/Scripts/python.exe -B scripts/build_standalone.py
+      - name: Verify source and executable
+        shell: pwsh
+        run: |
+          $testDirectory = Join-Path $env:RUNNER_TEMP ('privacy-review-' + [guid]::NewGuid().ToString('N'))
+          ./.venv/Scripts/python.exe -B -m pytest -q --basetemp $testDirectory
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          ./.venv/Scripts/python.exe -m ruff check .
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          ./.venv/Scripts/python.exe -m ruff format --check .
+      - uses: actions/upload-artifact@v4
+        with:
+          name: privacy-guard-windows-x64
+          path: |
+            dist/privacy-guard-*-windows-x64/*.zip
+            dist/privacy-guard-*-windows-x64/SHA256SUMS.txt
+          if-no-files-found: error

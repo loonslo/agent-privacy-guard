@@ -1,5 +1,37 @@
 # 验收记录
 
+## 2026-10-10 v0.4 Windows 单一可执行交付
+
+用户授权解决首次调用门槛。新增维护者构建脚本和 Windows x64 独立规则包，内置 Python 运行时、审查引擎、gitleaks，附 Python/gitleaks/PyInstaller 许可证与 ZIP SHA256 清单。基础 files 审核无需外装组件；Git 模式复用已有 Git。README、Skill 与 docs/standalone.md 给出直接调用方式与平台边界。产品仍只读建议模式，不登记客户端、不安装 hook 或执行修复。
+
+实际环境：Windows x64、Python 3.14.0、本项目原有独立 `.venv`；新增维护者构建依赖 PyInstaller 6.22.0（仅安装到本项目虚拟环境），原有 gitleaks 8.30.1。没有改系统 Python、PATH、客户端、真实受检仓库或认证目录；测试仅运行时合成材料与隔离临时 Git 仓库。
+
+| 验证 | 本次实际结果 |
+| --- | --- |
+| 首轮独立 EXE | 全新 privacy-standalone-GUID basetemp；6 passed in 16.45s |
+| 扫描器固定与许可证补充后全量 | `.venv/Scripts/python.exe -B -m pytest -q --basetemp <全新 privacy-standalone-full-GUID>`，指定 PRIVACY_GUARD_TEST_BUNDLE 为新构建候选包；**100 passed in 61.62s**，无跳过 |
+| 最终交付包 | 保留首轮产物到项目 dist 内备份目录后，重新构建默认版本目录；最终包使用全新 privacy-standalone-final-GUID basetemp 跑 tests/test_standalone.py，**7 passed in 16.25s** |
+| 无外装组件调用 | 只复制单个 EXE 到包含中文和空格的临时目录；清除 Python/扫描器配置并清空 PATH，刻意设置无效旧扫描器配置；普通文件和合成密钥审核完成，建议脱敏 |
+| 只读边界 | 风险、无命中、错误与 Git 模式调用前后，全部合成目标文件字节（含 .git）、status 与 local config 快照一致 |
+| 不完整与脱敏 | 缺失文件/非法参数静态 JSON，不回显标记或路径；无 Git 的 Git 模式返回 review_complete=false；请求语义保留 critical 规则风险，返回 incomplete，未递归启动冻结 EXE |
+| 打包 | ZIP 完整性、准确文件清单、SHA256、许可证验证通过；构建器拒绝覆盖已有产物且字节不变 |
+| 静态检查 | 最终 Ruff check 通过；format --check 37 文件通过；git diff --check 无空白错误；PROJECT_STATUS 契约、Skill frontmatter、工作流只读权限与包内说明一致性自检通过；EXE --version 返回 0.4.0 |
+
+最终包为 `dist/privacy-guard-0.4.0-windows-x64/privacy-guard-0.4.0-windows-x64.zip`，17,528,582 bytes；SHA256：`e9e2066dc08c2b49434b1111d4f9fc622a24f6272798a42d11a823e93b448386`。这是本机交付定位，不作为 PROJECT_STATUS evidence 正本；验收以本文件为稳定证据。构建不承诺二进制逐位重现，相同源码重新构建需重新生成/核验哈希。
+
+GitHub Release 列表实际为空。此任务尚未提交、推送或发布 v0.4.0；公开下载体验与新增 CI 未验收。清空 PATH 的同机隔离运行不冒充一台没有 Python 的新机器测试。其他 Windows 版本、macOS/Linux、真实客户端 UI、本地语义模型效果仍未验收。无命中不是安全保证，任何实际外发仍需用户决定。
+
+## 2026-10-10 AI 直接调用与首次使用门槛核查
+
+本次检查 README、Skill、CLI、打包脚本与公开 GitHub 页面；没有修改产品代码或客户端设置，没有审核真实凭据/Agent 运行目录。环境为 Windows、Python 3.14.0、本项目已有虚拟环境与本地扫描器。
+
+- `py -3 -B skills/privacy-review/scripts/review.py doctor` 返回 review_complete=true、scanned=0；仅证明已有环境扫描器健康，不代表项目内容已审核。
+- `.venv/Scripts/python.exe -B -m pytest -q tests/test_advisory.py tests/test_privacy_coverage.py::test_built_skill_runs_without_project_imports --basetemp <系统临时目录下全新 privacy-entry-audit-GUID>`：**7 passed in 12.87s**。覆盖无命中、风险建议、不完整检查、脱敏输出、目标文件/Git 快照不变、Skill 入口、真实 MCP stdio 和独立打包调用。全部使用合成材料与隔离临时仓库。
+- 隔离临时目录只复制源码引擎和 Skill，不复制 `.tools`；清除扫描器配置及 PATH，以 Python `-I -B` 执行 Skill doctor：退出 1、review_complete=false，静态错误为 Gitleaks unavailable。临时源与输出没有包含真实凭据，未回显任意异常或受检路径。
+- `git ls-files .tools dist` 无输出，确认当前版本控制不分发本地扫描器或独立包；公开 README 也明确 Python 与扫描器依赖。
+
+结论：有执行权限的 AI 可以按说明调用现有功能；当前成功依赖本机预先准备的组件。公开源码链接尚不满足“用户无需另装组件”的首次使用目标。未验收无 Python 机器、首次公开下载产物、其他平台或真实客户端 UI；本次未重复全量 93 项回归。
+
 ## 2026-10-10 GitHub 首次发布
 
 用户明确授权 commit + push，并指定新建公开仓库 agent-privacy-guard。使用已认证 GitHub CLI 账号 loonslo，新建 [公开仓库](https://github.com/loonslo/agent-privacy-guard)，origin 为该仓库 HTTPS 地址。
